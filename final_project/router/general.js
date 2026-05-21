@@ -1,9 +1,13 @@
+# Write the complete file
+cat > /home/project/expressBookReviews/final_project/router/general.js << 'EOF'
 const express = require('express');
 const axios = require('axios');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+
+// ========== TASKS 10-13: ASYNC/AWAIT & PROMISE ENDPOINTS ==========
 
 // Task 10: Get book list using Async/Await with Axios
 public_users.get('/async-books', async function (req, res) {
@@ -62,22 +66,24 @@ public_users.get('/async-title/:title', function (req, res) {
         });
 });
 
-// Original Task 1: Get all books (synchronous)
+// ========== TASKS 1-5: SYNCHRONOUS ENDPOINTS ==========
+
+// Task 1: Get the book list available in the shop
 public_users.get('/', function (req, res) {
     res.send(JSON.stringify(books, null, 4));
 });
 
-// Original Task 2: Get book by ISBN (synchronous)
+// Task 2: Get book details based on ISBN
 public_users.get('/isbn/:isbn', function (req, res) {
     const isbn = req.params.isbn;
     if (books[isbn]) {
         res.send(JSON.stringify(books[isbn], null, 4));
     } else {
-        res.status(404).json({message: "Book not found with ISBN: " + isbn});
+        res.status(404).json({ message: "Book not found with ISBN: " + isbn });
     }
 });
 
-// Original Task 3: Get books by author (synchronous)
+// Task 3: Get book details based on author
 public_users.get('/author/:author', function (req, res) {
     const author = req.params.author;
     let foundBooks = [];
@@ -96,11 +102,11 @@ public_users.get('/author/:author', function (req, res) {
     if (foundBooks.length > 0) {
         res.send(JSON.stringify(foundBooks, null, 4));
     } else {
-        res.status(404).json({message: "No books found by author: " + author});
+        res.status(404).json({ message: "No books found by author: " + author });
     }
 });
 
-// Original Task 4: Get books by title (synchronous)
+// Task 4: Get all books based on title
 public_users.get('/title/:title', function (req, res) {
     const title = req.params.title;
     let foundBooks = [];
@@ -119,26 +125,28 @@ public_users.get('/title/:title', function (req, res) {
     if (foundBooks.length > 0) {
         res.send(JSON.stringify(foundBooks, null, 4));
     } else {
-        res.status(404).json({message: "No books found with title containing: " + title});
+        res.status(404).json({ message: "No books found with title containing: " + title });
     }
 });
 
-// Original Task 5: Get book review (synchronous)
+// Task 5: Get book review
 public_users.get('/review/:isbn', function (req, res) {
     const isbn = req.params.isbn;
     if (books[isbn]) {
         if (Object.keys(books[isbn].reviews).length > 0) {
             res.send(JSON.stringify(books[isbn].reviews, null, 4));
         } else {
-            res.json({message: "No reviews found for this book."});
+            res.json({ message: "No reviews found for this book." });
         }
     } else {
-        res.status(404).json({message: "Book not found with ISBN: " + isbn});
+        res.status(404).json({ message: "Book not found with ISBN: " + isbn });
     }
 });
 
+// Task 6: Register placeholder (actual implementation in auth_users.js)
 public_users.post("/register", (req, res) => {
-    return res.status(300).json({message: "Yet to be implemented"});
+    return res.status(300).json({ message: "Yet to be implemented" });
 });
 
 module.exports.general = public_users;
+EOF
